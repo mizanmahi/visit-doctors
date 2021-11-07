@@ -1,6 +1,6 @@
 import { Button, Grid, Paper, Typography } from '@mui/material';
 import React from 'react';
-import AppointMedal from '../AppointMedal/AppointMedal';
+import AppointModal from '../AppointModal/AppointModal';
 
 const Booking = (props) => {
    const { name, space, time, date } = props;
@@ -33,7 +33,7 @@ const Booking = (props) => {
                </Button>
             </Paper>
          </Grid>
-         <AppointMedal {...props} date={date} open={open} handleClose={handleClose} />
+         <AppointModal {...props} date={date} open={open} handleClose={handleClose} />
       </>
    );
 };

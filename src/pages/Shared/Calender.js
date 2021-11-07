@@ -5,7 +5,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import StaticDatePicker from '@mui/lab/StaticDatePicker';
 
-const Calander = ({date, setDate}) => {
+const Calender = ({date, setDate}) => {
 
    return (
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -25,4 +25,4 @@ const Calander = ({date, setDate}) => {
    );
 };
 
-export default Calander;
+export default Calender;
