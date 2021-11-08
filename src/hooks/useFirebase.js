@@ -10,6 +10,7 @@ import {
    updateProfile,
 } from 'firebase/auth';
 import initializeAuthentication from '../firebase/firebase.init';
+import { axiosInstance } from '../utils/axiosInstance';
 
 //? initializing firebase authentication
 initializeAuthentication();
@@ -35,15 +36,19 @@ const useFirebase = () => {
          setAuthError(null);
 
          await createUserWithEmailAndPassword(auth, email, password);
+
          // this is one time as a placeholder
          setUser({ email, displayName: userName });
+
+         //@ update user profile
          await updateProfile(auth.currentUser, {
             displayName: userName,
          });
 
+         saveUserInfo(userName, email, 'POST');
+
          //? redirect to home page
          history.push('/');
-
       } catch (error) {
          setAuthError(error.message);
       } finally {
@@ -76,8 +81,13 @@ const useFirebase = () => {
    const loginWithGoogle = async (location, history) => {
       try {
          setUserLoading(true);
-         await signInWithPopup(auth, googleProvider);
+
+         const { user } = await signInWithPopup(auth, googleProvider);
          setAuthError(false);
+
+         saveUserInfo(user.displayName, user.email, 'PUT');
+
+         //@ redirect where user was going
          location?.state?.from
             ? history.push(location.state.from.pathname)
             : history.push('/');
@@ -118,6 +128,16 @@ const useFirebase = () => {
 
       return () => unSubscribe;
    }, [auth]);
+
+   const saveUserInfo = async (displayName, email, method) => {
+      const user = { displayName, email };
+      const { data } = await axiosInstance({
+         method,
+         url: '/users',
+         data: user,
+      });
+      console.log(data);
+   };
 
    return {
       user,

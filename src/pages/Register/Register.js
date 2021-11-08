@@ -128,7 +128,7 @@ const Register = () => {
                <img
                   src={loginImage}
                   alt='login cover'
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', maxWidth: '500px' }}
                />
             </Grid>
          </Grid>
