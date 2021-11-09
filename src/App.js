@@ -23,7 +23,7 @@ function App() {
                   <ProtectedRoute exact path='/appointment'>
                      <Appointment />
                   </ProtectedRoute>
-                  <ProtectedRoute exact path='/dashboard'>
+                  <ProtectedRoute path='/dashboard'>
                      <Dashboard />
                   </ProtectedRoute>
                   <Route exact path='/login'>

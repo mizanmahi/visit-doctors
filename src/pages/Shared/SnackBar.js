@@ -4,6 +4,7 @@ import React from 'react';
 const SnackBar = ({ open, handleClose, message, type, duration }) => {
    return (
       <Snackbar
+         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
          open={open}
          autoHideDuration={duration ? duration : 3000}
          onClose={handleClose}

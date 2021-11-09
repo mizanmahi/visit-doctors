@@ -14,18 +14,25 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Button, Grid } from '@mui/material';
-import Calender from '../Shared/Calender';
-import Appointments from './Appointments/Appointments';
+import { Button } from '@mui/material';
+import DashBoardMain from './DashBoardMain/DashBoardMain';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch, Switch, Route } from 'react-router-dom';
+import MakeAdmin from './MakeAdmin/MakeAdmin';
+import { useAuth } from '../../hooks/useAuth';
+import AdminRoute from '../Shared/AdminRoute';
+import AddDoctor from './AddDoctor/AddDoctor';
 
 const drawerWidth = 240;
 
-function Dashboard(props) {
+const Dashboard = (props) => {
+   // this is needed for nesting routing
+   const { path, url } = useRouteMatch();
+   const { admin, user } = useAuth();
+   console.log(admin);
+
    const { window } = props;
    const [mobileOpen, setMobileOpen] = useState(false);
-   const [date, setDate] = useState(new Date());
 
    const handleDrawerToggle = () => {
       setMobileOpen(!mobileOpen);
@@ -34,16 +41,32 @@ function Dashboard(props) {
    const drawer = (
       <div>
          <Toolbar />
-        
+
          <Divider />
-         <Link
-            to='/appointment'
-            style={{ textDecoration: 'none', }}
-         >
-            <Button variant='contained' sx={{ mt: 2, bgcolor: 'teal'}}>
+         <Link to='/appointment' style={{ textDecoration: 'none' }}>
+            <Button variant='contained' sx={{ mt: 2, bgcolor: 'teal' }}>
                Book Appointment
             </Button>
          </Link>
+         <Link to={`${url}`} style={{ textDecoration: 'none' }}>
+            <Button variant='contained' sx={{ mt: 2, bgcolor: 'teal' }}>
+               Dashboard
+            </Button>
+         </Link>
+         {admin && (
+            <Box>
+               <Link to={`${url}/makeAdmin`} style={{ textDecoration: 'none' }}>
+                  <Button variant='contained' sx={{ mt: 2, bgcolor: 'teal' }}>
+                     Make Admin
+                  </Button>
+               </Link>
+               <Link to={`${url}/addDoctor`} style={{ textDecoration: 'none' }}>
+                  <Button variant='contained' sx={{ mt: 2, bgcolor: 'teal' }}>
+                     Add Doctor
+                  </Button>
+               </Link>
+            </Box>
+         )}
          <List>
             {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                <ListItem button key={text}>
@@ -83,9 +106,21 @@ function Dashboard(props) {
                >
                   <MenuIcon />
                </IconButton>
-               <Typography variant='h6' noWrap component='div'>
-                  APPOINTMENTS
-               </Typography>
+               <Box
+                  sx={{
+                     display: 'flex',
+                     justifyContent: 'space-between',
+                     alignItems: 'center',
+                     width: 1,
+                  }}
+               >
+                  <Typography variant='h6' noWrap component='div'>
+                     APPOINTMENTS
+                  </Typography>
+                  <Typography variant='h6' noWrap component='div'>
+                     {user?.displayName}
+                  </Typography>
+               </Box>
             </Toolbar>
          </AppBar>
          <Box
@@ -138,17 +173,20 @@ function Dashboard(props) {
          >
             <Toolbar />
 
-            <Grid container>
-               <Grid item xs={12} md={5}>
-                  <Calender date={date} setDate={setDate} />
-               </Grid>
-               <Grid item xs={12} md={7}>
-                  <Appointments date={date} />
-               </Grid>
-            </Grid>
+            <Switch>
+               <Route exact path={path}>
+                  <DashBoardMain />
+               </Route>
+               <AdminRoute path={`${path}/makeAdmin`}>
+                  <MakeAdmin />
+               </AdminRoute>
+               <AdminRoute path={`${path}/addDoctor`}>
+                  <AddDoctor />
+               </AdminRoute>
+            </Switch>
          </Box>
       </Box>
    );
-}
+};
 
 export default Dashboard;

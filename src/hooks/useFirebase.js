@@ -8,9 +8,10 @@ import {
    GoogleAuthProvider,
    signInWithPopup,
    updateProfile,
+   getIdToken
 } from 'firebase/auth';
 import initializeAuthentication from '../firebase/firebase.init';
-import { axiosInstance } from '../utils/axiosInstance';
+import { axiAuth, axiosInstance } from '../utils/axiosInstance';
 
 //? initializing firebase authentication
 initializeAuthentication();
@@ -19,9 +20,9 @@ const useFirebase = () => {
    const [user, setUser] = useState(null);
    const [userLoading, setUserLoading] = useState(true);
    const [authError, setAuthError] = useState(false);
+   const [admin, setAdmin] = useState(false);
 
    const auth = getAuth();
-
    const googleProvider = new GoogleAuthProvider();
 
    //@ REGISTER WITH EMAIL AND PASS
@@ -49,6 +50,7 @@ const useFirebase = () => {
 
          //? redirect to home page
          history.push('/');
+
       } catch (error) {
          setAuthError(error.message);
       } finally {
@@ -78,6 +80,7 @@ const useFirebase = () => {
       }
    };
 
+   //@ Login with google
    const loginWithGoogle = async (location, history) => {
       try {
          setUserLoading(true);
@@ -112,6 +115,9 @@ const useFirebase = () => {
          (user) => {
             if (user) {
                setUser(user);
+               getIdToken(user).then((token) => {
+                  localStorage.setItem('idToken', token);
+               });
             } else {
                setUser(null);
             }
@@ -129,6 +135,16 @@ const useFirebase = () => {
       return () => unSubscribe;
    }, [auth]);
 
+   useEffect(() => {
+      if (user) {
+         setUserLoading(true)
+         axiAuth.get(`/users/${user?.email}`).then(({ data }) => {
+            setAdmin(data?.role ? data.role === 'admin' : false);
+            setUserLoading(false)
+         });
+      }
+   }, [user]);
+
    const saveUserInfo = async (displayName, email, method) => {
       const user = { displayName, email };
       const { data } = await axiosInstance({
@@ -141,6 +157,7 @@ const useFirebase = () => {
 
    return {
       user,
+      admin,
       authError,
       userLoading,
       registerWithEmailAndPassword,
