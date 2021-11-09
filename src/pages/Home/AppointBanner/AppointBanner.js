@@ -13,7 +13,7 @@ const background = {
 
 const AppointBanner = () => {
    return (
-      <Box sx={{ flexGrow: 1, my: 20, px: 2 }} style={background}>
+      <Box sx={{ flexGrow: 1, mt: 20, mb: 10, px: 2 }} style={background}>
          <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
                <img

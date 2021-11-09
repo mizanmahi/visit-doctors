@@ -60,15 +60,17 @@ const AppointModal = ({ open, handleClose, name, time, date }) => {
                   {name}
                </Typography>
 
-               <TextField
-                  size='small'
-                  label='time'
-                  variant='outlined'
-                  sx={{ width: '100%', mb: 2 }}
-                  defaultValue={time}
-                  readOnly
-                  {...register('time')}
-               />
+               <fieldset disabled style={{ border: 0, padding: 0 }}>
+                  <TextField
+                     size='small'
+                     label='time'
+                     variant='outlined'
+                     sx={{ width: '100%', mb: 2 }}
+                     defaultValue={time}
+                     readOnly
+                     {...register('time')}
+                  />
+               </fieldset>
 
                <TextField
                   size='small'

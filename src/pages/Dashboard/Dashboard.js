@@ -29,7 +29,8 @@ const Dashboard = (props) => {
    // this is needed for nesting routing
    const { path, url } = useRouteMatch();
    const { admin, user } = useAuth();
-   console.log(admin);
+      
+   console.log({path, url});
 
    const { window } = props;
    const [mobileOpen, setMobileOpen] = useState(false);

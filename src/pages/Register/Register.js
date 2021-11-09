@@ -15,7 +15,7 @@ import { useAuth } from '../../hooks/useAuth';
 import SnackBar from '../Shared/SnackBar';
 
 const Register = () => {
-   const { user, registerWithEmailAndPassword, userLoading, authError } =
+   const { registerWithEmailAndPassword, userLoading, authError } =
       useAuth();
    const history = useHistory();
    const [open, setOpen] = useState(false);
