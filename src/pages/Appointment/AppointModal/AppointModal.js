@@ -26,6 +26,7 @@ const AppointModal = ({ open, handleClose, name, time, date }) => {
 
    const handleBookingSubmit = async (bookingFormData) => {
       const appointBooking = {
+         // this is the date in the format of yyyy-mm-dd, this is important to do in client side as server's time zone could be different
          ...bookingFormData,
          date: date.toLocaleDateString(),
          serviceName: name,
